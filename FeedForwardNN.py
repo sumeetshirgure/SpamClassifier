@@ -7,7 +7,7 @@ class FeedForwardNN :
         '''
         Constructs an artificial neural network based on specified dimensions.
         The activation function and their derivatives should be specified for
-        each layer. Activation function phi[i] is a map on R^dims[i].
+        each layer. Activation function phi is a map on R.
         '''
         self.dims = dimensions
         self.depth = len(dimensions)
@@ -26,9 +26,9 @@ class FeedForwardNN :
             raise ValueError("At least two layers needed.")
         # Randomly initialize weights.
         for i in range(1, self.depth) :
-            self.W.append(np.random.random(
-                (dimensions[i-1], dimensions[i])))
-            self.b.append(np.random.random(dimensions[i]))
+            self.W.append(
+                    np.random.random_sample((dimensions[i-1], dimensions[i])))
+            self.b.append(np.random.random_sample(dimensions[i]))
         # Construct x tables.
         for i in range(1, self.depth) :
             self.z.append(np.zeros(dimensions[i]))
@@ -41,7 +41,7 @@ class FeedForwardNN :
         '''
         if( x.shape[0] != self.dims[0] ) :
             raise ValueError("Input dimension incorrect.")
-        self.x[0] = np.array(x)
+        self.x[0] = x.copy()
         for i in range(1, self.depth) :
             self.z[i] = self.x[i-1].dot(self.W[i])+self.b[i]
             self.x[i] = self.phi[i](self.z[i])
