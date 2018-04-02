@@ -2,7 +2,7 @@
 import math
 import numpy as np
 
-class ANN :
+class FeedForwardNN :
     def __init__ (self, dimensions, phi, dphi, lr=0.0, rp=0.0) :
         '''
         Constructs an artificial neural network based on specified dimensions.
@@ -39,7 +39,7 @@ class ANN :
         Perform a feedforward pass.
         Returns the prediction according to current weights.
         '''
-        if( len(x) != self.dims[0] ) :
+        if( x.shape[0] != self.dims[0] ) :
             raise ValueError("Input dimension incorrect.")
         self.x[0] = np.array(x)
         for i in range(1, self.depth) :
@@ -52,13 +52,13 @@ class ANN :
         Performs a backpropagation pass.
         Updates the weights according to the specified gradient.
         '''
-        if( len(nabla) != self.dims[self.depth-1] ) :
+        if( nabla.shape[0] != self.dims[self.depth-1] ) :
             raise ValueError("Input dimension incorrect.")
         dz = nabla*self.dphi[self.depth-1](self.z[self.depth-1])
         for i in range(self.depth-1, 0, -1) :
             dW = np.outer(self.x[i-1], dz)
             dW += self.rp * self.W[i]
-            self.W[i] -= self.lr * self.W[i]
+            self.W[i] -= self.lr * dW
             self.b[i] -= self.lr * dz
             if( i > 1 ) :
                 dz = (dz.dot(np.transpose(self.W[i]))*self.dphi[i](self.z[i-1]))
