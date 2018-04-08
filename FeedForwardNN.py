@@ -7,7 +7,8 @@ class FeedForwardNN :
         '''
         Constructs an artificial neural network based on specified dimensions.
         The activation function and their derivatives should be specified for
-        each layer. Activation function phi is a map on R.
+        each layer. Activation functions phi are a map on R.
+        Weights and biases are uniformly randomly initialized from [0., 1.].
         '''
         self.dims = dimensions
         self.depth = len(dimensions)

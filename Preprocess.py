@@ -12,6 +12,7 @@ from nltk.stem import PorterStemmer
 import os.path
 import pickle
 
+import numpy as np
 
 def GenerateDataSets (datafile, trainfile, testfile) :
     f = open(datafile)
@@ -62,7 +63,7 @@ def PreprocessData (trainfile, testfile, dictfile, trvec, tsvec) :
         vectors = []
         for line in processed_training_data :
             # Generate 1-hot vector and write to file.
-            vec = [0] * dictsize
+            vec = np.zeros( dictsize )
             for word in line[1] :
                 vec[ dictionary[word] ] = 1
             vectors.append( (line[0], vec) )
@@ -73,10 +74,10 @@ def PreprocessData (trainfile, testfile, dictfile, trvec, tsvec) :
         vectors = []
         for line in processed_testing_data :
             # Generate 1-hot vector and write to file.
-            vec = [0] * dictsize
+            vec = np.zeros( dictsize )
             for word in line[1] :
                 vec[ dictionary[word] ] = 1
-                vectors.append( (line[0], vec) )
+            vectors.append( (line[0], vec) )
         pickle.dump(vectors, testing_datafile, pickle.HIGHEST_PROTOCOL)
 
     # Write dictionary to file
