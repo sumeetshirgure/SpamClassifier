@@ -12,6 +12,8 @@ if __name__ == '__main__' :
     iterations = int(sys.argv[1])
     plotfreq   = int(sys.argv[2])
     plotfilename = sys.argv[3]
+    logfilename  = sys.argv[4]
+    logfile = open(logfilename, 'w')
 
     # Read .pkl files.
     with open('dict.pkl', 'rb') as df :
@@ -30,12 +32,9 @@ if __name__ == '__main__' :
                         lr = 0.1,
                         rp = 0.0)
     # Scale down weights. (Initialized between [0., 1.])
-    net.W[1] *= 0.02
-    net.b[1] *= 0.01
-    net.W[2] *= 0.02
-    net.b[2] *= 0.01
-    net.W[3] *= 0.02
-    net.b[3] *= 0.01
+    for i in [1, 2, 3] :
+        net.W[i] *= 0.02
+        net.b[i] *= 0.01
 
     def Prediction(x) :
         return net.FeedForward(x) >= 0.0
@@ -54,7 +53,7 @@ if __name__ == '__main__' :
     training_error = SquaredError(trvec)
     testing_error  = SquaredError(tsvec)
     e_in = [training_error]
-    e_out = [testing_error]
+    e_out = [testing_error] # Plot points
 
     def SGD(iterations, plotfreq, index=0) :
         '''
@@ -66,13 +65,16 @@ if __name__ == '__main__' :
             grad = op - (1 if trvec[index][0] else -1)
             net.BackPropagate(np.array(grad))
             print('\rIterations left :%10d' % iterations, end='\r')
-           # Reduce frequency
+            # Reduce frequency
             if( iterations % plotfreq == 0 ) : # Plot after a few iterations.
                 training_error = SquaredError(trvec)
                 testing_error  = SquaredError(tsvec)
                 e_in.append(training_error)
                 e_out.append(testing_error)
                 print('\nEin =', training_error, 'Eout = ', testing_error)
+                logfile.write('Ein = %f Eout=%f' %
+                        (training_error, testing_error))
+                logfile.write(' Iterations = %d\n' % iterations)
             index += 1
             if( index == len(trvec) ) :
                 index = 0
@@ -80,6 +82,7 @@ if __name__ == '__main__' :
         training_error = SquaredError(trvec)
         testing_error  = SquaredError(tsvec)
         print('\nDone. Ein =', training_error, 'Eout = ', testing_error)
+        logfile.write('Ein = %f Eout = %f.\n' % (training_error, testing_error))
 
     # Run SGD with given parameters
     SGD(iterations, plotfreq)
@@ -87,8 +90,10 @@ if __name__ == '__main__' :
     acc = sum([1 if Prediction(data[1]) == data[0] else 0 for data in tsvec])
     acc /= len(tsvec)
     print('Accuracy on testing set : %2.4f' % (acc * 100) )
+    logfile.write('Accuracy on testing set : %2.4f%%\n' % (acc * 100))
     plt.plot(range(len(e_in)), e_in, label='Ein')
     plt.legend()
     plt.plot(range(len(e_out)), e_out, label='Eout')
     plt.legend()
     plt.savefig(plotfilename)
+    logfile.close()
