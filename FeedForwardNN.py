@@ -7,7 +7,8 @@ class FeedForwardNN :
         '''
         Constructs an artificial neural network based on specified dimensions.
         The activation function and their derivatives should be specified for
-        each layer. Activation functions phi are a map on R.
+        each layer. Activation functions phi are a map on R. If passed None,
+        that layer's activation function acts as identity.
         Weights and biases are uniformly randomly initialized from [0., 1.].
         '''
         self.dims = dimensions
@@ -45,7 +46,10 @@ class FeedForwardNN :
         self.x[0] = x.copy()
         for i in range(1, self.depth) :
             self.z[i] = self.x[i-1].dot(self.W[i])+self.b[i]
-            self.x[i] = self.phi[i](self.z[i])
+            if self.phi[i] :
+                self.x[i] = self.phi[i](self.z[i])
+            else :
+                self.x[i] = self.z[i]
         return self.x[self.depth-1]
 
     def BackPropagate (self, nabla) :
@@ -55,14 +59,21 @@ class FeedForwardNN :
         '''
         if( nabla.shape[0] != self.dims[self.depth-1] ) :
             raise ValueError("Input dimension incorrect.")
-        dz = nabla*self.dphi[self.depth-1](self.z[self.depth-1])
+        if self.dphi[self.depth-1] :
+            dz = nabla*self.dphi[self.depth-1](self.z[self.depth-1])
+        else :
+            dz = nabla
         for i in range(self.depth-1, 0, -1) :
             dW = np.outer(self.x[i-1], dz)
             dW += self.rp * self.W[i]
             self.W[i] -= self.lr * dW
             self.b[i] -= self.lr * dz
-            if( i > 1 ) :
-                dz = (dz.dot(np.transpose(self.W[i]))*self.dphi[i](self.z[i-1]))
+            if i > 1  :
+                if self.dphi[i] :
+                    dz = (dz.dot(np.transpose(self.W[i]))*
+                            self.dphi[i](self.z[i-1]))
+                else :
+                    dz = dz.dot(np.transpose(self.W[i]))
 
     def SetLearningRate(self, rate) :
         '''
