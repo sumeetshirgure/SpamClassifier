@@ -33,12 +33,13 @@ def plot_decision_boundary(X, y, pred_func):
     plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral)
 
 def gold_standard (x):
-    foo = (x[0]-0.1)**2 + (x[1]+0.2)**2 - 0.09
-    return np.sign(foo) # +/- 1 values. Works for tanh.
+    foo = (x[0])**2 - (x[1])**2 - 0.04
+    rn = random.random()
+    return 1 if rn <= sigmoid(50 * foo) else -1 # +/- 1 values. Works for tanh.
 
 if __name__ == '__main__' :
     # Generate "random" data.
-    X = np.array([ np.random.random_sample(2) - .5 for _ in range(300) ])
+    X = np.array([ np.random.random_sample(2) - .5 for _ in range(500) ])
     y = np.array([ gold_standard (x) for x in X ])
 
     # Show "target" plot
