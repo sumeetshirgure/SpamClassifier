@@ -55,7 +55,7 @@ if __name__ == '__main__' :
             op = softmax(net.FeedForward(entry[1]))
             gold = np.zeros(2)
             gold[1 if entry[0] else 0] = 1
-            err -= (gold * np.log(op) + (1-gold) * np.log(1-op)).sum()
+            err -= (gold * np.log(op)).sum()
         return err / len(Data)
 
     # In sample and out of sample errors

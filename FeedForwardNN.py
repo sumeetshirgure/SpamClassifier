@@ -69,9 +69,9 @@ class FeedForwardNN :
             self.W[i] -= self.lr * dW
             self.b[i] -= self.lr * dz
             if i > 1  :
-                if self.dphi[i] :
+                if self.dphi[i-1] :
                     dz = (dz.dot(np.transpose(self.W[i]))*
-                            self.dphi[i](self.z[i-1]))
+                            self.dphi[i-1](self.z[i-1]))
                 else :
                     dz = dz.dot(np.transpose(self.W[i]))
 

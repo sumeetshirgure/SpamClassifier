@@ -90,8 +90,8 @@ if __name__ == '__main__' :
                 op = softmax(nn.FeedForward(X[i]))
                 label = np.zeros(2)
                 label[y[i]] = 1
-                loss = label * np.log(op) + (1-label) * np.log(1-op)
-                err -= loss
+                loss = label * np.log(op)
+                err -= loss.sum()
                 # Can add weight regularisation loss here.
             print(" Error=", err / len(X), end='\r')
             plot_decision_boundary(X, y, lambda x : predict(nn, x))
