@@ -1,0 +1,8 @@
+*.pdf
+*.txt
+__pycache__/*
+TODO
+.*.swp
+*.pkl
+*.png
+*.log

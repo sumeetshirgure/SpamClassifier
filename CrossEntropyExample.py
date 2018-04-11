@@ -39,7 +39,7 @@ def plot_decision_boundary(X, y, pred_func):
 def gold_standard (x):
     foo = (x[0]-0.1) ** 2 - x[1] ** 2 - 0.04
     rn = random.random() # Add random noise. Maybe not so golden after all.
-    return 1 if rn <= logistic(10 * foo) else 0
+    return 1 if rn <= logistic(20 * foo) else 0
 
 if __name__ == '__main__' :
     # Generate "random" data.
@@ -60,8 +60,8 @@ if __name__ == '__main__' :
             rp=nnrp)
 
     for i in [1, 2] : # Normalize weights
-        nn.W[i] = (nn.W[i]-0.5) * 0.1
-        nn.b[i] = (nn.b[i]-0.5) * 0.1
+        nn.W[i] = (nn.W[i]-0.5)
+        nn.b[i] = (nn.b[i]-0.5)
 
     def predict (model, x) :
         op = model.FeedForward(x)

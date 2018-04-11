@@ -90,6 +90,6 @@ def PreprocessData (trainfile, testfile, dictfile, trvec, tsvec) :
 if __name__ == '__main__' :
     if(not os.path.exists('Trainingset.txt')
     or not os.path.exists('Testingset.txt')):
-        GenerateDataSets('Dataset.txt', 'Trainingset.txt', 'Testingset.txt')
+        GenerateDataSets('Dataset.dat', 'Trainingset.txt', 'Testingset.txt')
         PreprocessData('Trainingset.txt', 'Testingset.txt',
                         'dict.pkl', 'trvec.pkl', 'tsvec.pkl')
