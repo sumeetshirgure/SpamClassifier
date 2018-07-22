@@ -7,9 +7,8 @@ from FeedForwardNN import FeedForwardNN
 def sigmoid(z) :
     return 1 / ( 1 + np.exp(-z) )
 
-def delsig(z) :
-    r = sigmoid(z)
-    return r * (1 - r)
+def delsig(z, x) :
+    return x * (1 - x)
 
 if __name__ == '__main__' :
     # Iterations

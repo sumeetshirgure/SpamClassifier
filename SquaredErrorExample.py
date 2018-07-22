@@ -4,11 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-def sech2(z) :
-    return 1 - np.tanh(z)**2
-
-def softplus(z) :
-    return np.log(1 + np.exp(z))
+def sech2(z, x) :
+    return 1 - x ** 2
 
 def sigmoid(z) :
     return 1 / (1 + np.exp(-z))

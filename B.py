@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from FeedForwardNN import FeedForwardNN
 
-def sech2(x) :
-    return 1 - np.tanh(x) ** 2
+def sech2(z, x) :
+    return 1 - x ** 2
 
 def softmax(x) :
     r = np.exp(x - np.max(x)) # Avoid overflow

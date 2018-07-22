@@ -60,7 +60,8 @@ class FeedForwardNN :
         if( nabla.shape[0] != self.dims[self.depth-1] ) :
             raise ValueError("Input dimension incorrect.")
         if self.dphi[self.depth-1] :
-            dz = nabla*self.dphi[self.depth-1](self.z[self.depth-1])
+            dz = nabla*self.dphi[self.depth-1](
+                    self.z[self.depth-1], self.x[self.depth-1])
         else :
             dz = nabla
         for i in range(self.depth-1, 0, -1) :
@@ -71,7 +72,7 @@ class FeedForwardNN :
             if i > 1  :
                 if self.dphi[i-1] :
                     dz = (dz.dot(np.transpose(self.W[i]))*
-                            self.dphi[i-1](self.z[i-1]))
+                            self.dphi[i-1](self.z[i-1], self.x[i-1]))
                 else :
                     dz = dz.dot(np.transpose(self.W[i]))
 
